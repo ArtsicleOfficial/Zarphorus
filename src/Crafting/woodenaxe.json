@@ -1,0 +1,21 @@
+{
+  "result": "WoodenAxe",
+  "resultCount": "1",
+  "ingredients": [
+    {
+      "type":"single",
+      "ingredient":"Stick",
+      "count":"1"
+    },
+    {
+      "type":"single",
+      "ingredient":"SharpStick",
+      "count":"2"
+    },
+    {
+      "type":"single",
+      "ingredient":"ToughString",
+      "count":"2"
+    }
+  ]
+}

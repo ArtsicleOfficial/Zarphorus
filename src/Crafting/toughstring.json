@@ -1,0 +1,11 @@
+{
+  "result": "ToughString",
+  "resultCount": "2",
+  "ingredients": [
+    {
+      "type": "single",
+      "ingredient":"CatTail",
+      "count": "1"
+    }
+  ]
+}
