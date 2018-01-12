@@ -4,6 +4,7 @@ package org.artsicleprojects.textadventure.Items;
 import static org.artsicleprojects.textadventure.Areas.InitAreas.*;
 
 import org.artsicleprojects.textadventure.Areas.Area;
+import org.artsicleprojects.textadventure.Enums.AreaClasses;
 import org.artsicleprojects.textadventure.Enums.ItemClasses;
 import org.artsicleprojects.textadventure.Enums.ToolClasses;
 import org.artsicleprojects.textadventure.Reference;
@@ -65,9 +66,9 @@ public class SharpStick implements Item
 	}
 
 	@Override
-	public Area[] getAreaSpawns()
+	public AreaClasses[] getAreaSpawns()
 	{
-		Area[] l = {MOUNTAINS,SNOWY,GRASSLANDS,TOWN,FOREST,DUNGEON};
+		AreaClasses[] l = {AreaClasses.MOUNTAIN,AreaClasses.SNOWY,AreaClasses.GRASSLAND,AreaClasses.TOWN,AreaClasses.FOREST,AreaClasses.DUNGEON};
 		return l;
 	}
 
@@ -86,6 +87,11 @@ public class SharpStick implements Item
 	@Override
 	public boolean isTool() {
 		return false;
+	}
+
+	@Override
+	public Integer getHarvestLevel() {
+		return null;
 	}
 
 	@Override

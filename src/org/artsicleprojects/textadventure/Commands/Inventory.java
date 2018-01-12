@@ -48,6 +48,11 @@ public class Inventory implements Command
     }
 
     @Override
+    public boolean isGameInteractionCommand() {
+        return false;
+    }
+
+    @Override
     public boolean canUseIfDead() {
         return true;
     }

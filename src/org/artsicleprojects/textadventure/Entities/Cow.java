@@ -1,6 +1,7 @@
 package org.artsicleprojects.textadventure.Entities;
 
 import org.artsicleprojects.textadventure.AreaCreatables.InventoryItem;
+import org.artsicleprojects.textadventure.Enums.AreaClasses;
 import org.artsicleprojects.textadventure.Enums.EntityClasses;
 import org.artsicleprojects.textadventure.Enums.ItemClasses;
 import org.artsicleprojects.textadventure.Reference;
@@ -69,9 +70,14 @@ public class Cow implements Entity
 	}
 
 	@Override
-	public org.artsicleprojects.textadventure.Areas.Area[] getAreaSpawns()
+	public Boolean alwaysSpawnsAtNight() {
+		return false;
+	}
+
+	@Override
+	public AreaClasses[] getAreaSpawns()
 	{
-		org.artsicleprojects.textadventure.Areas.Area[] s = {FOREST,GRASSLANDS,TOWN,SNOWY,MOUNTAINS};
+		AreaClasses[] s = {AreaClasses.FOREST,AreaClasses.GRASSLAND,AreaClasses.TOWN,AreaClasses.SNOWY,AreaClasses.MOUNTAIN};
 		return s;
 	}
 
@@ -86,6 +92,16 @@ public class Cow implements Entity
 	@Override
 	public Integer getSpawnCount() {
 		return 5;
+	}
+
+	@Override
+	public Boolean autoAttacksPlayer() {
+		return false;
+	}
+
+	@Override
+	public Float getMoneyOnDeath() {
+		return 0f;
 	}
 
 	@Override

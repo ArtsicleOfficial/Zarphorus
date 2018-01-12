@@ -7,5 +7,6 @@ public interface Command
     public String getCommandFailMessage();
     public String getHelpMessage();
 
+    public boolean isGameInteractionCommand();
     public boolean canUseIfDead();
 }

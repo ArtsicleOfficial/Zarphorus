@@ -6,5 +6,7 @@ public interface Area {
     public String getName();
     public AreaClasses getAreaClass();
 
+    public void whenWalkedIn();
+
     public boolean isDefault();
 }

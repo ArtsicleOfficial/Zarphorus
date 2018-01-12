@@ -4,26 +4,29 @@ package org.artsicleprojects.textadventure.Entities;
 
 public class InitEntities
 {
-    public Pig pig;
-    public Cow cow;
-    public Chicken chicken;
-    public Rabbit rabbit;
+    public static Pig PIG;
+    public static Cow COW;
+    public static Chicken CHICKEN;
+    public static Rabbit RABBIT;
+    public static Goblin GOBLIN;
     public InitEntities() {
         init();
         register();
     }
     public void init() {
-        pig = new Pig();
-        cow = new Cow();
-        chicken = new Chicken();
-        rabbit = new Rabbit();
+        PIG = new Pig();
+        COW = new Cow();
+        CHICKEN = new Chicken();
+        RABBIT = new Rabbit();
+        GOBLIN = new Goblin();
     }
     public void register() {
         EntityRegistry.registerEntities(
-                pig,
-                cow,
-                chicken,
-                rabbit
+                PIG,
+                COW,
+                GOBLIN,
+                CHICKEN,
+                RABBIT
         );
     }
 }

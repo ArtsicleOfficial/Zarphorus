@@ -63,6 +63,11 @@ public class Mine implements Command {
     }
 
     @Override
+    public boolean isGameInteractionCommand() {
+        return true;
+    }
+
+    @Override
     public boolean canUseIfDead() {
         return false;
     }

@@ -10,6 +10,11 @@ public class Snowy implements Area {
     }
 
     @Override
+    public void whenWalkedIn() {
+
+    }
+
+    @Override
     public String getName() {
         return "Snowy";
     }

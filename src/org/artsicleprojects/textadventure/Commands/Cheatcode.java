@@ -39,7 +39,7 @@ public class Cheatcode implements Command
             for(int i=0;i<args.length;i++) {
                 allArgs+=args[i];
             }
-            allArgs = allArgs.replaceAll(" ","");
+            allArgs = allArgs.replace(" ","");
             if(allArgs.equalsIgnoreCase("donaldtrump")) {
                 Main.addTexts("...",
                         "What!?",
@@ -68,6 +68,11 @@ public class Cheatcode implements Command
     @Override
     public String getHelpMessage() {
         return null;
+    }
+
+    @Override
+    public boolean isGameInteractionCommand() {
+        return false;
     }
 
     @Override

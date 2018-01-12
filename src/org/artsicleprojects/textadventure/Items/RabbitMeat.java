@@ -2,6 +2,7 @@ package org.artsicleprojects.textadventure.Items;
 
 import org.artsicleprojects.textadventure.Areas.Area;
 import org.artsicleprojects.textadventure.Areas.InitAreas;
+import org.artsicleprojects.textadventure.Enums.AreaClasses;
 import org.artsicleprojects.textadventure.Enums.ItemClasses;
 import org.artsicleprojects.textadventure.Enums.ToolClasses;
 import org.artsicleprojects.textadventure.Reference;
@@ -55,8 +56,8 @@ public class RabbitMeat implements Item {
     }
 
     @Override
-    public Area[] getAreaSpawns() {
-        return new Area[0];
+    public AreaClasses[] getAreaSpawns() {
+        return new AreaClasses[0];
     }
 
     @Override
@@ -77,6 +78,11 @@ public class RabbitMeat implements Item {
     @Override
     public float getCost() {
         return 20f;
+    }
+
+    @Override
+    public Integer getHarvestLevel() {
+        return null;
     }
 
     @Override

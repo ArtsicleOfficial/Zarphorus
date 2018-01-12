@@ -3,7 +3,7 @@ package org.artsicleprojects.textadventure.Entities;
 import org.artsicleprojects.ArtUtils.ArtUtils;
 import org.artsicleprojects.textadventure.AreaCreatables.InventoryItem;
 import org.artsicleprojects.textadventure.Areas.Area;
-import org.artsicleprojects.textadventure.Areas.InitAreas;
+import org.artsicleprojects.textadventure.Enums.AreaClasses;
 import org.artsicleprojects.textadventure.Enums.EntityClasses;
 import org.artsicleprojects.textadventure.Enums.ItemClasses;
 import org.artsicleprojects.textadventure.Reference;
@@ -58,8 +58,13 @@ public class Chicken implements Entity {
     }
 
     @Override
-    public Area[] getAreaSpawns() {
-        return new Area[]{InitAreas.FOREST,InitAreas.SNOWY,InitAreas.MOUNTAINS,InitAreas.TOWN,InitAreas.SWAMP,InitAreas.GRASSLANDS};
+    public Boolean alwaysSpawnsAtNight() {
+        return false;
+    }
+
+    @Override
+    public AreaClasses[] getAreaSpawns() {
+        return new AreaClasses[]{AreaClasses.FOREST,AreaClasses.SNOWY,AreaClasses.MOUNTAIN,AreaClasses.TOWN,AreaClasses.SWAMP,AreaClasses.GRASSLAND};
     }
 
     @Override
@@ -70,6 +75,16 @@ public class Chicken implements Entity {
     @Override
     public Integer getSpawnCount() {
         return 3;
+    }
+
+    @Override
+    public Boolean autoAttacksPlayer() {
+        return false;
+    }
+
+    @Override
+    public Float getMoneyOnDeath() {
+        return 0f;
     }
 
     @Override

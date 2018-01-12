@@ -1,6 +1,7 @@
 package org.artsicleprojects.textadventure.Items;
 
 import org.artsicleprojects.textadventure.Areas.Area;
+import org.artsicleprojects.textadventure.Enums.AreaClasses;
 import org.artsicleprojects.textadventure.Enums.ItemClasses;
 import org.artsicleprojects.textadventure.Enums.ToolClasses;
 
@@ -18,7 +19,7 @@ public interface Item
 
     public boolean canBeEquipped();
 
-    public Area[] getAreaSpawns();
+    public AreaClasses[] getAreaSpawns();
     public int[] getAreaChances();
     public int getSpawnCount();
 
@@ -27,6 +28,7 @@ public interface Item
     public boolean canBeBought();
 
     public boolean isTool();
+    public Integer getHarvestLevel();
     public ToolClasses[] getToolClasses();
     public Integer getToolDamage();
 

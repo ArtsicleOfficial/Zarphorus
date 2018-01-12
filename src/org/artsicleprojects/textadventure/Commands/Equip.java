@@ -31,7 +31,7 @@ public class Equip implements Command
                         {
                             if ( Player.inventory.get(i).COUNT >= 1 )
                             {
-                                if ( Player.inventory.get(i).ITEM_CLASS.getValue() != ItemClasses.AIR.getValue() )
+                                if ( Player.inventory.get(i).ITEM_CLASS.getID() != ItemClasses.AIR.getID() )
                                 {
                                     if ( ItemHandler.getItemByInventoryItem(Player.inventory.get(i)).getItemName().equalsIgnoreCase(args[0]))
                                     {
@@ -84,6 +84,11 @@ public class Equip implements Command
     @Override
     public String getHelpMessage() {
         return "Equips item specified";
+    }
+
+    @Override
+    public boolean isGameInteractionCommand() {
+        return true;
     }
 
     @Override

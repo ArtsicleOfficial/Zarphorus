@@ -1,10 +1,11 @@
 package org.artsicleprojects.textadventure.Enums;
 
 public enum EntityClasses {
-    PIG(-109455),
-    COW(1529087),
-    RABBIT(90178521),
-    CHICKEN(58917230);
+    PIG(0),
+    COW(1),
+    RABBIT(2),
+    CHICKEN(3),
+    GOBLIN(4);
     private Integer value;
 
     EntityClasses(Integer value) {

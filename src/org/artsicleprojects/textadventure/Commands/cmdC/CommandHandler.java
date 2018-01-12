@@ -1,6 +1,8 @@
 package org.artsicleprojects.textadventure.Commands.cmdC;
 
+import org.artsicleprojects.textadventure.Area;
 import org.artsicleprojects.textadventure.Commands.Command;
+import org.artsicleprojects.textadventure.Enums.Arguments;
 import org.artsicleprojects.textadventure.Main;
 import org.artsicleprojects.textadventure.Player;
 import org.artsicleprojects.textadventure.Reference;
@@ -77,10 +79,12 @@ public class CommandHandler {
                         Main.addText(fChar+"----");
                         if(! s.commandPerformed(a)) {
                             String fail = s.getCommandFailMessage();
-                            fail = fail.replaceAll("##itemname",Reference.ARGUMENT_ITEM_NAME);
-                            fail = fail.replaceAll("##amount",Reference.ARGUMENT_ITEM_COUNT);
-                            fail = fail.replaceAll("##filename",Reference.ARGUMENT_FILE_NAME);
                             Main.addText(fail);
+                        } else {
+                            if(s.isGameInteractionCommand()) {
+                                Player.getAttackedByAreaEntities();
+                                Area.gameInteractionCommandRun();
+                            }
                         }
                         Main.input.setText("");
                         activated = true;
@@ -94,7 +98,6 @@ public class CommandHandler {
 
         Main.autosave();
     }
-
     public static void triggerCommand(String command) {
         String all[] = command.split(" ");
         String cmd = all[0];

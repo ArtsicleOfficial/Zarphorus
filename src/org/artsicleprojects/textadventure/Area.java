@@ -1,5 +1,6 @@
 package org.artsicleprojects.textadventure;
 
+import org.artsicleprojects.ArtUtils.ArtUtils;
 import org.artsicleprojects.textadventure.AreaCreatables.AreaEntity;
 import org.artsicleprojects.textadventure.AreaCreatables.AreaMineable;
 import org.artsicleprojects.textadventure.AreaCreatables.AreaNpc;
@@ -24,11 +25,14 @@ public class Area {
     public static Random randArea = new Random();
     public static Integer areaSeed = new Random().nextInt(2);
     public static Integer smallAreaSeed = new Random().nextInt(2);
+    public static Time gameTime = new Time(30, 6, 0);
+    public static Time gameTimeAddition = new Time(30, 4, 0);
     public static Boolean areaLooted = false;
 
     public static List<InventoryItem> localItems = getItemsInArea();
     public static List<AreaEntity> localEntities = getEntitiesInArea();
     public static List<AreaMineable> localMineables = getMineablesInArea();
+    public static List<AreaNpc> localNpcs = getNpcsInArea();
 
     public static void walkToSameArea() {
         if(Player.tryRemoveEnergy(Reference.STEP_ENERGY_REMOVAL)) {
@@ -40,7 +44,13 @@ public class Area {
             localItems = getItemsInArea();
             localEntities = getEntitiesInArea();
             localMineables = getMineablesInArea();
+            localNpcs = getNpcsInArea();
+            currentArea.whenWalkedIn();
         }
+    }
+
+    public static void gameInteractionCommandRun() {
+        gameTime.addTime(gameTimeAddition);
     }
 
     public static void saveAreaItems() {
@@ -61,10 +71,18 @@ public class Area {
 
     public static void newArea() {
         boolean done = false;
+        org.artsicleprojects.textadventure.Areas.Area prevArea = currentArea;
         smallAreaSeed = new Random().nextInt(2);
         areaSeed = new Random().nextInt(2);
         for(int i = 0; i < AreaHandler.areas.size(); i++) {
-            int rand = (int)Math.floor(Math.random()*100);
+            int rand = ArtUtils.randomInt(0, 100);
+            int areaChance = AreaHandler.areas.get(i).getAreaClass().getValue()[1];
+            if(currentArea.getAreaClass().getValue()[0].equals(AreaHandler.areas.get(i).getAreaClass().getValue()[0])) {
+                areaChance += 10;
+                if(areaChance > 100) {
+                    areaChance = 100;
+                }
+            }
             if(rand <= AreaHandler.areas.get(i).getAreaClass().getValue()[1]) {
                 currentArea = AreaHandler.areas.get(i);
                 done = true;
@@ -77,8 +95,11 @@ public class Area {
         localItems = getItemsInArea();
         localEntities = getEntitiesInArea();
         localMineables = getMineablesInArea();
+        localNpcs = getNpcsInArea();
         areaLooted = false;
+        currentArea.whenWalkedIn();
     }
+
     public static void addItemToArea(InventoryItem s) {
         ItemClasses id1 = s.ITEM_CLASS;
         Boolean contains = false;
@@ -104,7 +125,7 @@ public class Area {
                 boolean canMineableSpawn = false;
                 Integer areaNum = 0;
                 for(int l = 0; l < MineableHandler.mineables.get(i).getAreaSpawns().length; l++) {
-                    if(MineableHandler.mineables.get(i).getAreaSpawns()[l].getAreaClass().getValue()[0] == Area.currentArea.getAreaClass().getValue()[0]) {
+                    if(MineableHandler.mineables.get(i).getAreaSpawns()[l].getValue()[0] == Area.currentArea.getAreaClass().getValue()[0]) {
                         areaNum = l;
                         canMineableSpawn = true;
                     }
@@ -147,7 +168,6 @@ public class Area {
                 }else {
                     canEntitySpawn = false;
                 }
-
                 if(canEntitySpawn) {
                     Random random = new Random();
                     random.setSeed(System.nanoTime());
@@ -156,132 +176,130 @@ public class Area {
                         areaNpcs.add(new AreaNpc(npc.npcClass()));
                     }
                 }
-
-
             }
         }
         return areaNpcs;
     }
 
-            public static List<AreaEntity> getEntitiesInArea () {
-                List<AreaEntity> areaEntities = new ArrayList<>();
-                for(int a = 0; a < smallAreaSeed; a++) {
-                    for(int i = 0; i < EntityHandler.entities.size(); i++) {
-                        boolean canEntitySpawn = false;
-                        Integer areaNum = 0;
-                        for(int l = 0; l < EntityHandler.entities.get(i).getAreaSpawns().length; l++) {
-                            if((EntityHandler.entities.get(i).getAreaSpawns()[l]).getAreaClass().getValue()[0] == (Area.currentArea).getAreaClass().getValue()[0]) {
-                                areaNum = l;
-                                canEntitySpawn = true;
-                            }
-                        }
-                        Entity entity = EntityHandler.entities.get(i);
-                        if(entity.canSpawn() != null) {
-                            if(! entity.canSpawn()) {
-                                canEntitySpawn = false;
-                            }
-                        }else {
-                            canEntitySpawn = false;
-                        }
-
-                        if(canEntitySpawn) {
-                            Random random = new Random();
-                            for(int x = 0; x < entity.getSpawnCount(); x++) {
-                                random.setSeed(System.nanoTime());
-                                Integer f = random.nextInt(100);
-                                if(f <= entity.getAreaChances()[areaNum]) {
-                                    areaEntities.add(new AreaEntity(entity.getEntityClass(), EntityHandler.getEntityByClass(entity.getEntityClass()).maxHealth()));
-                                }
-                            }
-
-                        }
+    public static List<AreaEntity> getEntitiesInArea() {
+        List<AreaEntity> areaEntities = new ArrayList<>();
+        for(int a = 0; a < smallAreaSeed; a++) {
+            for(int i = 0; i < EntityHandler.entities.size(); i++) {
+                boolean canEntitySpawn = false;
+                Integer areaNum = 0;
+                for(int l = 0; l < EntityHandler.entities.get(i).getAreaSpawns().length; l++) {
+                    if((EntityHandler.entities.get(i).getAreaSpawns()[l]).getValue()[0] == (Area.currentArea).getAreaClass().getValue()[0]) {
+                        areaNum = l;
+                        canEntitySpawn = true;
                     }
                 }
-                return areaEntities;
-            }
+                Entity entity = EntityHandler.entities.get(i);
+                if(entity.canSpawn() != null) {
+                    if(! entity.canSpawn()) {
+                        canEntitySpawn = false;
+                    }
+                }else {
+                    canEntitySpawn = false;
+                }
 
-        public static void saveAreaSeed () {
-            if(areaSeed <= 0) {
-                areaSeed++;
-            }
-            if(smallAreaSeed <= 0) {
-                smallAreaSeed++;
+                if(canEntitySpawn) {
+                    Random random = new Random();
+                    for(int x = 0; x < entity.getSpawnCount(); x++) {
+                        random.setSeed(System.nanoTime());
+                        Integer f = random.nextInt(100);
+                        if(f <= entity.getAreaChances()[areaNum]) {
+                            areaEntities.add(new AreaEntity(entity.getEntityClass(), EntityHandler.getEntityByClass(entity.getEntityClass()).maxHealth()));
+                        }
+                    }
+
+                }
             }
         }
+        return areaEntities;
+    }
 
-        public static List<InventoryItem> getItemsInArea () {
-            List<InventoryItem> s = new ArrayList<>();
-            randArea.setSeed(System.nanoTime());
-            saveAreaSeed();
-            if(! areaLooted) {
-                for(int f = 0; f < areaSeed; f++) {
-                    for(int i = 0; i < ItemHandler.items.size(); i++) {
-                        boolean itemCanSpawn = false;
-                        Integer areaNum = Reference.EMPTY_NUMBER;
-                        for(int l = 0; l < ItemHandler.items.get(i).getAreaSpawns().length; l++) {
-                            if(ItemHandler.items.get(i).getAreaSpawns()[l].getName().equalsIgnoreCase(Area.currentArea.getName())) {
-                                areaNum = l;
-                                itemCanSpawn = true;
-                            }
-                        }
-                        Item item = ItemHandler.items.get(i);
-                        if(! item.canSpawn()) {
-                            itemCanSpawn = false;
-                        }
-                        if(itemCanSpawn) {
-                            Random random = new Random();
-                            InventoryItem currItem = null;
-                            int count = 0;
-                            for(int x = 0; x < ItemHandler.items.get(i).getSpawnCount(); x++) {
-                                random.setSeed(System.nanoTime());
-                                int a = (int)Math.floor(random.nextInt(100));
-                                //System.out.println(a + " " + item.getAreaChances()[areaNum]);
-                                if(a <= item.getAreaChances()[areaNum]) {
-                                    count++;
-                                }
-                            }
-                            if(count >= 1) {
-                                currItem = new InventoryItem(count, item.getItemClass());
-                            }
-                            if(currItem != null) {
-                                s.add(currItem);
-                            }
-                        }
-                    }
-                }
-            }
-            //List<Item> item = new ArrayList<>();
-            if(s.size() >= 1) {
-                for(int i = 0; i < s.size(); i++) {
-                    if(! ItemHandler.getItemByInventoryItem(s.get(i)).canSpawn()) {
-
-                        s.remove(i);
-                    }
-                }
-                for(int x = 0; x < 5; x++) {
-                    for(int i = 0; i < s.size(); i++) {
-                        for(int l = 0; l < s.size(); l++) {
-                            if(s.get(i).ITEM_CLASS == s.get(l).ITEM_CLASS && s.get(i) != s.get(l)) {
-                                s.get(i).COUNT += s.get(l).COUNT;
-                                s.remove(l);
-                            }
-                        }
-                    }
-                }
-            }
-            return s;
+    public static void saveAreaSeed() {
+        if(areaSeed <= 0) {
+            areaSeed++;
         }
-
-        public static void lootArea () {
-            if(localItems.size() >= 1) {
-                for(int i = 0; i < localItems.size(); i++) {
-                    Player.noPrintAddInventoryItem(localItems.get(i));
-                    Main.addText("Looted "+localItems.get(i).COUNT+" * "+ItemHandler.getItemByInventoryItem(localItems.get(i)).getItemName());
-                }
-                localItems.clear();
-            }
-
-            Player.saveInventory();
-            areaLooted = true;
+        if(smallAreaSeed <= 0) {
+            smallAreaSeed++;
         }
     }
+
+    public static List<InventoryItem> getItemsInArea() {
+        List<InventoryItem> s = new ArrayList<>();
+        randArea.setSeed(System.nanoTime());
+        saveAreaSeed();
+        if(! areaLooted) {
+            for(int f = 0; f < areaSeed; f++) {
+                for(int i = 0; i < ItemHandler.items.size(); i++) {
+                    boolean itemCanSpawn = false;
+                    Integer areaNum = Reference.EMPTY_NUMBER;
+                    for(int l = 0; l < ItemHandler.items.get(i).getAreaSpawns().length; l++) {
+                        if(AreaHandler.getAreaByClass(ItemHandler.items.get(i).getAreaSpawns()[l]).getName().equalsIgnoreCase(Area.currentArea.getName())) {
+                            areaNum = l;
+                            itemCanSpawn = true;
+                        }
+                    }
+                    Item item = ItemHandler.items.get(i);
+                    if(! item.canSpawn()) {
+                        itemCanSpawn = false;
+                    }
+                    if(itemCanSpawn) {
+                        Random random = new Random();
+                        InventoryItem currItem = null;
+                        int count = 0;
+                        for(int x = 0; x < ItemHandler.items.get(i).getSpawnCount(); x++) {
+                            random.setSeed(System.nanoTime());
+                            int a = (int)Math.floor(random.nextInt(100));
+                            //System.out.println(a + " " + item.getAreaChances()[areaNum]);
+                            if(a <= item.getAreaChances()[areaNum]) {
+                                count++;
+                            }
+                        }
+                        if(count >= 1) {
+                            currItem = new InventoryItem(count, item.getItemClass());
+                        }
+                        if(currItem != null) {
+                            s.add(currItem);
+                        }
+                    }
+                }
+            }
+        }
+        //List<Item> item = new ArrayList<>();
+        if(s.size() >= 1) {
+            for(int i = 0; i < s.size(); i++) {
+                if(! ItemHandler.getItemByInventoryItem(s.get(i)).canSpawn()) {
+
+                    s.remove(i);
+                }
+            }
+            for(int x = 0; x < 5; x++) {
+                for(int i = 0; i < s.size(); i++) {
+                    for(int l = 0; l < s.size(); l++) {
+                        if(s.get(i).ITEM_CLASS == s.get(l).ITEM_CLASS && s.get(i) != s.get(l)) {
+                            s.get(i).COUNT += s.get(l).COUNT;
+                            s.remove(l);
+                        }
+                    }
+                }
+            }
+        }
+        return s;
+    }
+
+    public static void lootArea() {
+        if(localItems.size() >= 1) {
+            for(int i = 0; i < localItems.size(); i++) {
+                Player.noPrintAddInventoryItem(localItems.get(i));
+                Main.addText("Looted "+localItems.get(i).COUNT+" * "+ItemHandler.getItemByInventoryItem(localItems.get(i)).getItemName());
+            }
+            localItems.clear();
+        }
+
+        Player.saveInventory();
+        areaLooted = true;
+    }
+}

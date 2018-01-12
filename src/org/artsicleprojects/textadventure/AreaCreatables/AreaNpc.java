@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class AreaNpc {
     public NpcClasses ID;
-    public Hashtable<InventoryItem,Float> TRADES = new Hashtable<>();
+    public Hashtable<InventoryItem,Float> TRADES = null;
     public Integer INTERACTION_ID = 0;
     public Integer TIER = 0;
 
@@ -18,6 +18,9 @@ public class AreaNpc {
         this.ID = npcClass;
         this.TIER = ArtUtils.randomInt(1,5);
         this.INTERACTION_ID = new Random(System.nanoTime()).nextInt(9999-1000)+1000;
-        this.TRADES = NpcHandler.generateTrades(TIER);
+        this.TRADES = NpcHandler.generateTrades(TIER,NpcHandler.getNpcByEnum(npcClass).getAllowedItemsSold());
+        if(this.TRADES.size() >= 1) {
+            ArtUtils.println("ye");
+        }
     }
 }

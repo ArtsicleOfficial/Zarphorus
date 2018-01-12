@@ -2,9 +2,11 @@ package org.artsicleprojects.textadventure;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import org.artsicleprojects.ArtUtils.ArtUtils;
 import org.artsicleprojects.artcoder.ArtCoder;
 import org.artsicleprojects.textadventure.AreaCreatables.AreaEntity;
 import org.artsicleprojects.textadventure.AreaCreatables.AreaMineable;
+import org.artsicleprojects.textadventure.AreaCreatables.AreaNpc;
 import org.artsicleprojects.textadventure.AreaCreatables.InventoryItem;
 import org.artsicleprojects.textadventure.Areas.AreaHandler;
 
@@ -67,8 +69,10 @@ public class FileSystem {
             return;
         }
     }
+
     public static void writeToFile(String pathToFile,String name) {
         try {
+            Main.deleteLogFile = false;
             FileWriter write = new FileWriter(pathToFile,true);
             PrintWriter writer = new PrintWriter(write);
             String player_energy = String.valueOf(Player.playerEnergy);
@@ -76,6 +80,7 @@ public class FileSystem {
             String player_health = String.valueOf(Player.playerHealth);
             String max_player_health = String.valueOf(Player.maxPlayerHealth);
             writer.println(ArtCoder.artCodeString("PLAYER_ENERGY@"+Player.playerEnergy));
+            writer.println(ArtCoder.artCodeString("MONEY@"+Player.playerMoney));
             writer.println(ArtCoder.artCodeString("PLAYER_MAX_ENERGY@"+Player.maxPlayerEnergy));
             writer.println(ArtCoder.artCodeString("PLAYER_HEALTH@"+Player.playerHealth));
             writer.println(ArtCoder.artCodeString("PLAYER_MAX_HEALTH@"+Player.maxPlayerHealth));
@@ -84,6 +89,7 @@ public class FileSystem {
             writer.println(ArtCoder.artCodeString("LOCAL_ITEMS@"+gson.toJson(Area.localItems)));
             writer.println(ArtCoder.artCodeString("LOCAL_ENTITIES@"+gson.toJson(Area.localEntities)));
             writer.println(ArtCoder.artCodeString("LOCAL_MINEABLES@"+gson.toJson(Area.localMineables)));
+            writer.println(ArtCoder.artCodeString("LOCAL_NPCS@"+gson.toJson(Area.localNpcs)));
             writer.println(ArtCoder.artCodeString("PLAYER_REST_ENERGY_ADDITION@"+Player.REST_ENERGY_ADDITION));
             writer.println(ArtCoder.artCodeString("PLAYER_LEVEL@"+Player.level));
             writer.println(ArtCoder.artCodeString("PLAYER_EXPERIENCE@"+Player.xpPoints));
@@ -97,9 +103,49 @@ public class FileSystem {
         }
     }
 
+    private static String getLoadGameString(String gkey,String name) {
+        String str = "";
+        File toDelete = new File("C:/" + Reference.NAME + "/logs/log" + Main.date.format(Main.launchDate) + ".txt");
+        Main.deleteLogFile = true;
+        String path = "C:/"+Reference.NAME+"/saves/"+name+".zar";
+        File file = new File(path);
+        if(file.exists()) {
+            try {
+                FileReader reader = new FileReader(file);
+                BufferedReader breader = new BufferedReader(reader);
+                List<String> strings = new ArrayList<>();
+                String stri = "";
+                while((str = breader.readLine()) != null) {
+                    strings.add(stri);
+                }
+                HashMap<String,String> values = new HashMap<>();
+                for(int i = 0;i < strings.size();i++) {
+                    String currLineArtCoded = strings.get(i);
+                    String currLineString = ArtCoder.deArtCodeString(strings.get(i));
+                    ArtUtils.println(strings.get(i));
+                    String[] currValue = ArtCoder.deArtCodeString(strings.get(i)).split("@");
+                    values.put(currValue[0],currValue[1]);
+                }
+                for(Map.Entry<String,String> table : values.entrySet()) {
+                    String key = table.getKey();
+                    if(key.equalsIgnoreCase(gkey)) {
+                        stri = table.getValue();
+                        ArtUtils.print(stri);
+                    }
+                }
+            } catch(IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        toDelete.delete();
+        return str;
+    }
+
     public static void DeleteGame(String name) {
         String path = "C:/"+Reference.NAME+"/saves/"+name+".zar";
         if(new File(path).exists()) {
+            //new File("C:/" + Reference.NAME + "/logs/log" + Main.date.format(new Date(Long.valueOf(getLoadGameString("LAUNCH_DATE",name)) + ".txt"))).delete();
             File toDelete = new File(path);
             toDelete.delete();
             Main.addText("Deleted file '"+name+".zar'");
@@ -159,6 +205,8 @@ public class FileSystem {
     }
 
     public static void LoadGame(String name) {
+        File toDelete = new File("C:/" + Reference.NAME + "/logs/log" + Main.date.format(Main.launchDate) + ".txt");
+        Main.deleteLogFile = true;
         String path = "C:/"+Reference.NAME+"/saves/"+name+".zar";
         File file = new File(path);
         if(file.exists()) {
@@ -183,10 +231,7 @@ public class FileSystem {
                     Boolean boolvalue = false;
                     Integer intvalue = 0;
                     Long longvalue = 0l;
-                    if(value.equalsIgnoreCase("null")) {
-
-                    } else {
-
+                    if(!value.equalsIgnoreCase("null")) {
                         if(isAllNumeric(value)) {
                             longvalue = Long.parseLong(value);
                         }
@@ -200,8 +245,6 @@ public class FileSystem {
                             boolvalue = Boolean.parseBoolean(value);
                         }
                     }
-
-
                     if(key.equalsIgnoreCase("INVENTORY")) {
                         List<InventoryItem> inventoryFromFile;
                         inventoryFromFile = gson.fromJson(table.getValue(),new TypeToken<List<InventoryItem>>(){}.getType());
@@ -239,6 +282,7 @@ public class FileSystem {
                         while((cur = br.readLine()) != null) {
                             all += cur + System.lineSeparator();
                         }
+                        Main.deleteLogFile = false;
                         Main.console.setText(all);
                         Main.addText("Loaded log file ' log" + Main.date.format(Main.launchDate) + ".txt");
                     } else if(is(key,"LOCAL_ENTITIES")) {
@@ -253,8 +297,14 @@ public class FileSystem {
                         ArrayList<AreaMineable> areaMineablesFromFile;
                         areaMineablesFromFile = gson.fromJson(table.getValue(),new TypeToken<List<AreaMineable>>(){}.getType());
                         Area.localMineables = areaMineablesFromFile;
+                    } else if(is(key,"LOCAL_NPCS")) {
+                        ArrayList<AreaNpc> areaNpcsFromFile;
+                        areaNpcsFromFile = gson.fromJson(table.getValue(),new TypeToken<List<AreaNpc>>(){}.getType());
+                        Area.localNpcs = areaNpcsFromFile;
                     } else if(is(key,"BIOME")) {
                         org.artsicleprojects.textadventure.Areas.Area area = AreaHandler.getAreaByName(value);
+                    } else if(is(key,"MONEY")) {
+                        Player.playerMoney = Float.valueOf(value);
                     }
                 }
             } catch(IOException ex) {
@@ -263,6 +313,8 @@ public class FileSystem {
         } else {
             Main.addText("'"+name+".zar'"+Reference.FILE_NO_EXIST_MESSAGE);
         }
+
+        toDelete.delete();
     }
 
     public static boolean is(String compar1,String compar2) {
@@ -278,6 +330,7 @@ public class FileSystem {
         }
         return false;
     }
+
     public static boolean isAllNumeric(String input) {
         boolean numeric = true;
         for(int i = 0; i < input.length();i++) {

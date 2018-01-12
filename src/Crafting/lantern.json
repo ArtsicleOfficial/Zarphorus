@@ -1,0 +1,21 @@
+{
+  "result": "Lantern",
+  "resultCount": "1",
+  "ingredients": [
+    {
+      "type": "single",
+      "ingredient":"Coal",
+      "count": "2"
+    },
+    {
+      "type":"single",
+      "ingredient":"Rock",
+      "count":"5"
+    },
+    {
+      "type":"single",
+      "ingredient":"ToughString",
+      "count":"2"
+    }
+  ]
+}

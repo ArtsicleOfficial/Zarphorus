@@ -1,38 +1,34 @@
 package org.artsicleprojects.textadventure.Items;
 
 import org.artsicleprojects.textadventure.Areas.Area;
+import org.artsicleprojects.textadventure.Enums.AreaClasses;
 import org.artsicleprojects.textadventure.Enums.ItemClasses;
 import org.artsicleprojects.textadventure.Enums.ToolClasses;
 import org.artsicleprojects.textadventure.Reference;
 
 import javax.tools.Tool;
 
-import static org.artsicleprojects.textadventure.Areas.InitAreas.*;
+import static org.artsicleprojects.textadventure.Enums.ToolClasses.*;
 
-public class Stick implements Item
-{
+public class Stick implements Item {
 
     @Override
-    public void ItemUsed()
-    {
+    public void ItemUsed() {
 
     }
 
     @Override
-    public void ItemEquipped()
-    {
+    public void ItemEquipped() {
 
     }
 
     @Override
-    public void ItemDropped()
-    {
+    public void ItemDropped() {
 
     }
 
     @Override
-    public void ItemPickedUp()
-    {
+    public void ItemPickedUp() {
 
     }
 
@@ -52,49 +48,42 @@ public class Stick implements Item
     }
 
     @Override
-    public ItemClasses getItemClass()
-    {
+    public ItemClasses getItemClass() {
         return ItemClasses.STICK;
     }
 
 
     @Override
-    public int getAttackDamage()
-    {
+    public int getAttackDamage() {
         return 2;
     }
 
     @Override
-    public String getItemName()
-    {
+    public String getItemName() {
         return "Stick";
     }
 
     @Override
-    public int attackEnergyUse()
-    {
+    public int attackEnergyUse() {
         return 3;
     }
 
     @Override
-    public boolean canBeEquipped()
-    {
+    public boolean canBeEquipped() {
         return true;
     }
 
     @Override
-    public Area[] getAreaSpawns()
-    {
+    public AreaClasses[] getAreaSpawns() {
         //Areas that item can be looted from
-        Area[] s = {GRASSLANDS,SNOWY,TOWN,DUNGEON,MOUNTAINS,FOREST};
+        AreaClasses[] s = {AreaClasses.GRASSLAND, AreaClasses.SNOWY, AreaClasses.TOWN, AreaClasses.DUNGEON, AreaClasses.MOUNTAIN, AreaClasses.FOREST};
         return s;
     }
 
     @Override
-    public int[] getAreaChances()
-    {
+    public int[] getAreaChances() {
         //Chances to get item from area out of 100 (In same order as getAreaLoots)
-        int[] c = {6,4,7,2,1,15};
+        int[] c = {6, 4, 7, 2, 1, 15};
         return c;
     }
 
@@ -109,6 +98,11 @@ public class Stick implements Item
     }
 
     @Override
+    public Integer getHarvestLevel() {
+        return 0;
+    }
+
+    @Override
     public ToolClasses[] getToolClasses() {
         return new ToolClasses[0];
     }
@@ -119,21 +113,18 @@ public class Stick implements Item
     }
 
     @Override
-    public boolean canSpawn()
-    {
+    public boolean canSpawn() {
         return true;
     }
 
     @Override
-    public boolean isFood()
-    {
+    public boolean isFood() {
         return false;
     }
 
     @Override
-    public int[] getMinAndMaxFoodValue()
-    {
-        int[] c = {1,1};
+    public int[] getMinAndMaxFoodValue() {
+        int[] c = {1, 1};
         return c;
     }
 }

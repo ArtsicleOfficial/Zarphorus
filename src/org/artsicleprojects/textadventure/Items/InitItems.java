@@ -18,6 +18,10 @@ public class InitItems
     public static WoodenPickaxe WOODEN_PICKAXE;
     public static WoodenAxe WOODEN_AXE;
     public static ChickenBreast CHICKEN_BREAST;
+    public static CopperOre COPPER_ORE;
+    public static IronOre IRON_ORE;
+    public static Lantern LANTERN;
+    public static Flesh FLESH;
 
     public InitItems() {
         init();
@@ -38,6 +42,10 @@ public class InitItems
         WOODEN_PICKAXE = new WoodenPickaxe();
         WOODEN_AXE = new WoodenAxe();
         CHICKEN_BREAST = new ChickenBreast();
+        IRON_ORE = new IronOre();
+        COPPER_ORE = new CopperOre();
+        LANTERN = new Lantern();
+        FLESH = new Flesh();
     }
     public void register() {
         ItemRegistry.regsterItems(
@@ -54,7 +62,11 @@ public class InitItems
                 ROCK,
                 WOODEN_PICKAXE,
                 WOODEN_AXE,
-                CHICKEN_BREAST
+                CHICKEN_BREAST,
+                IRON_ORE,
+                COPPER_ORE,
+                LANTERN,
+                FLESH
         );
     }
 }

@@ -1,9 +1,12 @@
 package org.artsicleprojects.textadventure;
 
+import org.artsicleprojects.ArtUtils.ArtUtils;
 import org.artsicleprojects.textadventure.AreaCreatables.AreaEntity;
+import org.artsicleprojects.textadventure.AreaCreatables.AreaMineable;
 import org.artsicleprojects.textadventure.AreaCreatables.InventoryItem;
 import org.artsicleprojects.textadventure.Crafts.CraftingItem;
 import org.artsicleprojects.textadventure.Entities.EntityHandler;
+import org.artsicleprojects.textadventure.Enums.GameMessages;
 import org.artsicleprojects.textadventure.Enums.ItemClasses;
 import org.artsicleprojects.textadventure.Enums.ToolClasses;
 import org.artsicleprojects.textadventure.Items.Item;
@@ -18,20 +21,25 @@ import java.util.Random;
 public class Player {
     public static InventoryItem equippedItem;
     public static List<InventoryItem> inventory = new ArrayList<>();
+
+    public static Boolean dead = false;
+
     public static Integer playerEnergy = 100;
     public static Integer maxPlayerEnergy = 100;
     public static Integer minPlayerEnergy = 0;
-
     public static Integer playerHealth = 100;
     public static Integer minPlayerHealth = 0;
     public static Integer maxPlayerHealth = 100;
-
     public static Integer xpPoints = 1;
     public static Integer level = 1;
     public static Integer nextlevelXp = getNextLevelXp();
-
     public static Integer REST_ENERGY_ADDITION = 1;
+    public static Float playerMoney = 0f;
 
+    public static void addPlayerMoney(Float add) {
+        playerMoney += add;
+        playerMoney = ArtUtils.toFixedDecimalLength(playerMoney,2);
+    }
     public static boolean getDead() {
         return dead;
     }
@@ -67,7 +75,6 @@ public class Player {
         Double exponent = 1.25;
         return ((int)Math.round(basexp*(Math.pow(level,exponent))));
     }
-
     public static void levelUpAttempt() {
         if(xpPoints >= getNextLevelXp()) {
             xpPoints-=getNextLevelXp();
@@ -76,10 +83,20 @@ public class Player {
         }
     }
     public static void mineMineable(InventoryItem with, Integer index) {
-        Area.localMineables.get(index).DURABILITY-=ItemHandler.getItemByInventoryItem(with).getToolDamage();
-        Player.addInventoryItem(new InventoryItem(ItemHandler.getItemByInventoryItem(with).getToolDamage()/3,MineableHandler.getMineableByClass(Area.localMineables.get(index).CLASS).getDrop().getItemClass()));
-        if(Area.localMineables.get(index).DURABILITY <= 0) {
-            Area.localMineables.remove(index);
+        if(ItemHandler.getItemByInventoryItem(with).isTool()) {
+            Integer level;
+            level = MineableHandler.getMineableByClass(Area.localMineables.get(index).CLASS).getMinimumHarvestLevel();
+            if(ItemHandler.getItemByInventoryItem(with).getHarvestLevel() >= level) {
+                Area.localMineables.get(index).DURABILITY-=ItemHandler.getItemByInventoryItem(with).getToolDamage();
+                Player.addInventoryItem(new InventoryItem(ItemHandler.getItemByInventoryItem(with).getToolDamage()/3,MineableHandler.getMineableByClass(Area.localMineables.get(index).CLASS).getDrop()));
+                if(Area.localMineables.get(index).DURABILITY <= 0) {
+                    Area.localMineables.remove(index);
+                }
+            } else {
+                GameMessages.tooLowHarvestLevel.Reset();
+                GameMessages.tooLowHarvestLevel.SetItem(ItemHandler.getItemByInventoryItem(with));
+                GameMessages.tooLowHarvestLevel.PrintMessage();
+            }
         }
     }
     public static boolean tryRemoveEnergy(int rem) {
@@ -90,19 +107,14 @@ public class Player {
             return false;
         }
     }
-
-    public static Boolean dead = false;
-
     public static void addPlayerHealth(Integer add) {
         playerHealth += add;
         savePlayerHealth();
     }
-
     public static void removePlayerHealth(Integer remove) {
         playerHealth -= remove;
         savePlayerHealth();
     }
-
     public static void setPlayerHealth(Integer set) {
         playerHealth = set;
         savePlayerHealth();
@@ -166,6 +178,15 @@ public class Player {
         }
         return has;
     }
+    public static boolean inventoryHasItem(ItemClasses compar) {
+        boolean has = false;
+        for(InventoryItem v : inventory) {
+            if(v.ITEM_CLASS.getID() == compar.getID()) {
+                has = true;
+            }
+        }
+        return has;
+    }
     public static boolean inventoryHasItem(CraftingItem compar) {
         boolean has = false;
         for(InventoryItem v : inventory) {
@@ -184,6 +205,17 @@ public class Player {
         }
         return s;
     }
+    public static void getAttackedByAreaEntities() {
+        for(int i = 0; i < Area.localEntities.size(); i++) {
+            if(Area.localEntities.get(i).ATTACKING_PLAYER) {
+                Integer oofPower = Player.attackPlayer(Area.localEntities.get(i));
+                GameMessages.attackedByEntity.Reset();
+                GameMessages.attackedByEntity.SetEntity(EntityHandler.getEntityByAreaEntity(Area.localEntities.get(i)));
+                GameMessages.attackedByEntity.SetLoss(Float.valueOf(oofPower));
+                GameMessages.attackedByEntity.PrintMessage();
+            }
+        }
+    }
     public static void experienceAdd(int xp) {
         xpPoints+=xp;
         levelUpAttempt();
@@ -193,12 +225,10 @@ public class Player {
         experienceAdd(xp);
         Main.addText(xp + " experience gained");
     }
-
     public static void playerDeath() {
         Main.addText("You died");
         dead = true;
     }
-
     public static void savePlayerHealth() {
         if(playerHealth >= maxPlayerHealth) {
             playerHealth = maxPlayerHealth;
@@ -208,7 +238,6 @@ public class Player {
             dead = true;
         }
     }
-
     public static void setDead(Boolean dea) {
         dead = dea;
         if(!dea) {
@@ -219,27 +248,26 @@ public class Player {
 
         }
     }
+
     public Player() {
         nextlevelXp = (int)Math.floor(level*150);
         inventory.add(new InventoryItem(2,ItemClasses.BREAD));
         inventory.add(new InventoryItem(1,ItemClasses.BACON));
+        addPlayerMoney(ArtUtils.randomFloat(100,200f));
     }
 
     public static void addEnergy(Integer add) {
         playerEnergy += add;
         preventOverflow();
     }
-
     public static void removeEnergy(Integer rem) {
         playerEnergy -= rem;
         preventOverflow();
     }
-
     public static void setEnergy(Integer set) {
         playerEnergy = set;
         preventOverflow();
     }
-
     public static void saveInventory() {
         for(int i = 0;i < inventory.size();i++) {
             if(inventory.get(i).COUNT < 1) {
@@ -255,11 +283,10 @@ public class Player {
             }
         }
     }
-
     public static void addInventoryItem(InventoryItem item) {
         boolean done = false;
         if(equippedItem != null) {
-            if(equippedItem.ITEM_CLASS.getValue() == item.ITEM_CLASS.getValue()) {
+            if(equippedItem.ITEM_CLASS.getID() == item.ITEM_CLASS.getID()) {
                 equippedItem.COUNT += item.COUNT;
                 done = true;
             }
@@ -285,7 +312,7 @@ public class Player {
     }
     public static Integer eatFood(Item item) {
         if(Player.equippedItem != null) {
-            if(Player.equippedItem.ITEM_CLASS.getValue() == item.getItemClass().getValue()) {
+            if(Player.equippedItem.ITEM_CLASS.getID() == item.getItemClass().getID()) {
                 if(item.isFood()) {
                     Integer prev = playerEnergy;
                     Random random = new Random();
@@ -321,7 +348,6 @@ public class Player {
         }
         return Reference.EMPTY_NUMBER;
     }
-
     public static void preventOverflow() {
         if(playerEnergy >= maxPlayerEnergy) {
             playerEnergy = maxPlayerEnergy;

@@ -9,6 +9,7 @@ public class InitAreas {
     public static Grasslands GRASSLANDS;
     public static Mountains MOUNTAINS;
     public static Swamp SWAMP;
+    public static Cave CAVE;
     public InitAreas() {
         init();
         register();
@@ -23,6 +24,7 @@ public class InitAreas {
         GRASSLANDS = new Grasslands();
         MOUNTAINS = new Mountains();
         SWAMP = new Swamp();
+        CAVE = new Cave();
     }
     private void register() {
         AreaRegistry.registerAreas(
@@ -33,7 +35,8 @@ public class InitAreas {
                 FOREST,
                 GRASSLANDS,
                 MOUNTAINS,
-                SWAMP
+                SWAMP,
+                CAVE
         );
     }
 }

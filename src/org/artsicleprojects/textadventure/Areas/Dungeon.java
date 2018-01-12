@@ -10,6 +10,11 @@ public class Dungeon implements Area {
     }
 
     @Override
+    public void whenWalkedIn() {
+
+    }
+
+    @Override
     public String getName() {
         return "Dungeon";
     }

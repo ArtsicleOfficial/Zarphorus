@@ -1,76 +1,64 @@
 package org.artsicleprojects.textadventure.Items;
 
 import org.artsicleprojects.textadventure.Areas.InitAreas;
+import org.artsicleprojects.textadventure.Enums.AreaClasses;
 import org.artsicleprojects.textadventure.Enums.ItemClasses;
 import org.artsicleprojects.textadventure.Enums.ToolClasses;
 import org.artsicleprojects.textadventure.Reference;
 
-public class GodItem implements Item
-{
+public class GodItem implements Item {
     @Override
-    public void ItemUsed()
-    {
+    public void ItemUsed() {
 
     }
 
     @Override
-    public void ItemEquipped()
-    {
+    public void ItemEquipped() {
 
     }
 
     @Override
-    public void ItemDropped()
-    {
+    public void ItemDropped() {
 
     }
 
     @Override
-    public void ItemPickedUp()
-    {
+    public void ItemPickedUp() {
 
     }
 
     @Override
-    public ItemClasses getItemClass()
-    {
+    public ItemClasses getItemClass() {
         return ItemClasses.GOD_ITEM;
     }
 
     @Override
-    public int getAttackDamage()
-    {
+    public int getAttackDamage() {
         return 999;
     }
 
     @Override
-    public String getItemName()
-    {
+    public String getItemName() {
         return "GodItem";
     }
 
     @Override
-    public int attackEnergyUse()
-    {
+    public int attackEnergyUse() {
         return 1;
     }
 
     @Override
-    public boolean canBeEquipped()
-    {
+    public boolean canBeEquipped() {
         return true;
     }
 
     @Override
-    public org.artsicleprojects.textadventure.Areas.Area[] getAreaSpawns()
-    {
-
-        return new org.artsicleprojects.textadventure.Areas.Area[] {InitAreas.FOREST};
+    public AreaClasses[] getAreaSpawns() {
+        return new AreaClasses[]{AreaClasses.FOREST};
     }
 
     @Override
-    public int[] getAreaChances()
-    {
+    public int[] getAreaChances() {
         return new int[]{0};
     }
 
@@ -82,6 +70,11 @@ public class GodItem implements Item
     @Override
     public boolean isTool() {
         return true;
+    }
+
+    @Override
+    public Integer getHarvestLevel() {
+        return null;
     }
 
     @Override
@@ -110,20 +103,17 @@ public class GodItem implements Item
     }
 
     @Override
-    public boolean canSpawn()
-    {
+    public boolean canSpawn() {
         return false;
     }
 
     @Override
-    public boolean isFood()
-    {
+    public boolean isFood() {
         return true;
     }
 
     @Override
-    public int[] getMinAndMaxFoodValue()
-    {
-        return new int[]{999,999};
+    public int[] getMinAndMaxFoodValue() {
+        return new int[]{999, 999};
     }
 }

@@ -1,6 +1,8 @@
 package org.artsicleprojects.textadventure.Items;
 
 import org.artsicleprojects.textadventure.Areas.Area;
+import org.artsicleprojects.textadventure.Enums.AreaClasses;
+import org.artsicleprojects.textadventure.Enums.GameMessages;
 import org.artsicleprojects.textadventure.Enums.ItemClasses;
 import org.artsicleprojects.textadventure.Enums.ToolClasses;
 import org.artsicleprojects.textadventure.Main;
@@ -10,30 +12,31 @@ import org.artsicleprojects.textadventure.Reference;
 public class Cactus implements Item {
     @Override
     public void ItemUsed() {
-        Player.removePlayerHealth(4);
-        Main.addText("Touching that cactus hurts");
-        Main.addText("- 4 Health (" + Player.playerHealth + "/" + Player.maxPlayerHealth + ")");
+        handleCactus();
     }
 
     @Override
     public void ItemEquipped() {
+        handleCactus();
+    }
+
+    private void handleCactus() {
         Player.removePlayerHealth(4);
-        Main.addText("Touching that cactus hurts");
-        Main.addText("- 4 Health (" + Player.playerHealth + "/" + Player.maxPlayerHealth + ")");
+        GameMessages.touchingItemHurts.Reset();
+        GameMessages.touchingItemHurts.SetItem(this);
+        GameMessages.touchingItemHurts.PrintMessage();
+        GameMessages.loseHealth.SetLoss(4f);
+        GameMessages.loseHealth.PrintMessage();
     }
 
     @Override
     public void ItemDropped() {
-        Player.removePlayerHealth(4);
-        Main.addText("Touching that cactus hurts");
-        Main.addText("- 4 Health (" + Player.playerHealth + "/" + Player.maxPlayerHealth + ")");
+        handleCactus();
     }
 
     @Override
     public void ItemPickedUp() {
-        Player.removePlayerHealth(4);
-        Main.addText("Touching that cactus hurts.");
-        Main.addText("- 4 Health (" + Player.playerHealth + "/" + Player.maxPlayerHealth + ")");
+        handleCactus();
     }
 
     @Override
@@ -53,7 +56,7 @@ public class Cactus implements Item {
 
     @Override
     public int attackEnergyUse() {
-        return 0;
+        return 16;
     }
 
     @Override
@@ -62,8 +65,8 @@ public class Cactus implements Item {
     }
 
     @Override
-    public Area[] getAreaSpawns() {
-        return new Area[0];
+    public AreaClasses[] getAreaSpawns() {
+        return new AreaClasses[0];
     }
 
     @Override
@@ -94,6 +97,11 @@ public class Cactus implements Item {
     @Override
     public boolean isTool() {
         return false;
+    }
+
+    @Override
+    public Integer getHarvestLevel() {
+        return null;
     }
 
     @Override

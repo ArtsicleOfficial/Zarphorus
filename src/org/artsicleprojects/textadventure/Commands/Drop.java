@@ -2,7 +2,9 @@ package org.artsicleprojects.textadventure.Commands;
 
 import org.artsicleprojects.ArtUtils.ArtUtils;
 import org.artsicleprojects.textadventure.*;
+import org.artsicleprojects.textadventure.Area;
 import org.artsicleprojects.textadventure.AreaCreatables.InventoryItem;
+import org.artsicleprojects.textadventure.Enums.GameMessages;
 import org.artsicleprojects.textadventure.Items.ItemHandler;
 import org.artsicleprojects.textadventure.Player;
 
@@ -53,9 +55,15 @@ public class Drop implements Command
 						if(item.COUNT <= 0) {
 							Player.inventory.remove(item);
 						}
-						Main.addText("Dropped " + one + " of '" + zer + "' (" + ItemHandler.getItemByName(zer).getItemName() + ") onto the ground");
+						GameMessages.itemDropped.Reset();
+						GameMessages.itemDropped.SetItem(ItemHandler.getItemByClass(item.ITEM_CLASS));
+						GameMessages.itemDropped.SetLoss(Float.valueOf(item.COUNT));
+						GameMessages.itemDropped.PrintMessage();
 					} else {
-						Main.addText("Not enough of '" + ItemHandler.getItemByClass(item.ITEM_CLASS).getItemName() + "' in inventory");
+					    GameMessages.notEnoughOfItem.Reset();
+						GameMessages.notEnoughOfItem.SetItem(ItemHandler.getItemByClass(item.ITEM_CLASS));
+						GameMessages.notEnoughOfItem.SetLoss(Float.valueOf(one));
+						GameMessages.notEnoughOfItem.PrintMessage();
 					}
 				} else {
 					Main.addText("'" + zer + "' (" + ItemHandler.getItemByName(zer).getItemName() + ") is not in your inventory");
@@ -78,6 +86,11 @@ public class Drop implements Command
 	@Override
 	public String getHelpMessage() {
 		return "Drops item specified";
+	}
+
+	@Override
+	public boolean isGameInteractionCommand() {
+		return true;
 	}
 
 	@Override

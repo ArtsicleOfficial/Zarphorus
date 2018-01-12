@@ -3,11 +3,10 @@ package org.artsicleprojects.textadventure.Entities;
 import org.artsicleprojects.ArtUtils.ArtUtils;
 import org.artsicleprojects.textadventure.AreaCreatables.InventoryItem;
 import org.artsicleprojects.textadventure.Areas.Area;
+import org.artsicleprojects.textadventure.Enums.AreaClasses;
 import org.artsicleprojects.textadventure.Enums.EntityClasses;
 import org.artsicleprojects.textadventure.Enums.ItemClasses;
 import org.artsicleprojects.textadventure.Reference;
-
-import static org.artsicleprojects.textadventure.Areas.InitAreas.*;
 
 public class Rabbit implements Entity {
     @Override
@@ -56,8 +55,13 @@ public class Rabbit implements Entity {
     }
 
     @Override
-    public Area[] getAreaSpawns() {
-        return new Area[]{FOREST,SWAMP,GRASSLANDS,DESERT,TOWN,MOUNTAINS,SNOWY};
+    public Boolean alwaysSpawnsAtNight() {
+        return false;
+    }
+
+    @Override
+    public AreaClasses[] getAreaSpawns() {
+        return new AreaClasses[]{AreaClasses.FOREST,AreaClasses.SWAMP,AreaClasses.GRASSLAND,AreaClasses.DESERT,AreaClasses.TOWN,AreaClasses.MOUNTAIN,AreaClasses.SNOWY};
     }
 
     @Override
@@ -68,6 +72,16 @@ public class Rabbit implements Entity {
     @Override
     public Integer getSpawnCount() {
         return 6;
+    }
+
+    @Override
+    public Boolean autoAttacksPlayer() {
+        return false;
+    }
+
+    @Override
+    public Float getMoneyOnDeath() {
+        return 0f;
     }
 
     @Override

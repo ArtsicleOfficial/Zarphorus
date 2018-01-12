@@ -15,7 +15,7 @@ public class Crafting {
         List<String> files = new ArrayList<>();
         if(new File("src/Crafting").listFiles().length >= 1) {
             for(File file : new File("src/Crafting").listFiles()) {
-                files.add(file.getName().replaceAll(".json",""));
+                files.add(file.getName().replace(".json",""));
             }
         } else {
             files.add("No recipes found!");
@@ -65,7 +65,7 @@ public class Crafting {
         boolean any = false;
         for(File f : new File("src/Crafting/").listFiles()) {
             //JsonObject l = new JsonParser().parse()
-            String n = f.getName().replaceAll(".json","");
+            String n = f.getName().replace(".json","");
 
             if(n.equalsIgnoreCase(toCraft)) {
                 isAny = true;

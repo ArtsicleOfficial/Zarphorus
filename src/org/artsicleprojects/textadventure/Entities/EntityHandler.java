@@ -3,6 +3,7 @@ package org.artsicleprojects.textadventure.Entities;
 import org.artsicleprojects.textadventure.AreaCreatables.AreaEntity;
 import org.artsicleprojects.textadventure.AreaCreatables.InventoryItem;
 import org.artsicleprojects.textadventure.Enums.EntityClasses;
+import org.artsicleprojects.textadventure.Enums.GameMessages;
 import org.artsicleprojects.textadventure.Items.ItemHandler;
 import org.artsicleprojects.textadventure.Main;
 import org.artsicleprojects.textadventure.Player;
@@ -23,12 +24,13 @@ public class EntityHandler {
 			if(Player.tryRemoveEnergy(ItemHandler.getItemByInventoryItem(item).getAttackDamage())) {
 				entity.HEALTH-=attack;
 			} else {
-                Main.addText("Player energy too low to attack using equipped item");
+			    GameMessages.energyTooLow.Reset();
+			    GameMessages.energyTooLow.Update();
+                GameMessages.energyTooLow.PrintMessage();
                 attack = 0;
             }
 		} else {
 			entity.HEALTH = EntityHandler.getEntityByClass(entity.ENTITY_CLASS).minHealth();
-
 		}
 		return attack;
 	}

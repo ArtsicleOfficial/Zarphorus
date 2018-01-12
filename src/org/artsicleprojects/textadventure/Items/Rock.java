@@ -2,6 +2,7 @@ package org.artsicleprojects.textadventure.Items;
 
 import org.artsicleprojects.textadventure.Areas.Area;
 import org.artsicleprojects.textadventure.Areas.InitAreas;
+import org.artsicleprojects.textadventure.Enums.AreaClasses;
 import org.artsicleprojects.textadventure.Enums.ItemClasses;
 import org.artsicleprojects.textadventure.Enums.ToolClasses;
 import org.artsicleprojects.textadventure.Reference;
@@ -68,8 +69,8 @@ public class Rock implements Item {
     }
 
     @Override
-    public Area[] getAreaSpawns() {
-        return new Area[]{InitAreas.GRASSLANDS,InitAreas.TOWN,InitAreas.FOREST,InitAreas.SWAMP,InitAreas.SNOWY,InitAreas.MOUNTAINS,InitAreas.DUNGEON,InitAreas.DESERT};
+    public AreaClasses[] getAreaSpawns() {
+        return new AreaClasses[]{AreaClasses.GRASSLAND,AreaClasses.TOWN,AreaClasses.FOREST,AreaClasses.SWAMP,AreaClasses.SNOWY,AreaClasses.MOUNTAIN,AreaClasses.DUNGEON,AreaClasses.DESERT};
     }
 
     @Override
@@ -85,6 +86,11 @@ public class Rock implements Item {
     @Override
     public boolean isTool() {
         return false;
+    }
+
+    @Override
+    public Integer getHarvestLevel() {
+        return null;
     }
 
     @Override

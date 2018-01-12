@@ -1,6 +1,7 @@
 package org.artsicleprojects.textadventure.Items;
 
 import org.artsicleprojects.textadventure.Areas.Area;
+import org.artsicleprojects.textadventure.Enums.AreaClasses;
 import org.artsicleprojects.textadventure.Enums.ItemClasses;
 import org.artsicleprojects.textadventure.Enums.ToolClasses;
 import org.artsicleprojects.textadventure.Reference;
@@ -59,9 +60,9 @@ public class Air implements Item
     }
 
     @Override
-    public Area[] getAreaSpawns()
+    public AreaClasses[] getAreaSpawns()
     {
-        Area[] s = {FOREST};
+        AreaClasses[] s = {AreaClasses.FOREST};
         return s;
     }
 
@@ -100,6 +101,11 @@ public class Air implements Item
     @Override
     public boolean isTool() {
         return false;
+    }
+
+    @Override
+    public Integer getHarvestLevel() {
+        return null;
     }
 
     @Override

@@ -13,8 +13,6 @@ public class Reference
     public static final Integer WALK_ENERGY_REMOVAL = 3;
     public static final Integer STEP_ENERGY_REMOVAL = 2;
 
-    public static final String ARGUMENT_ITEM_NAME = "ITEM_NAME";
-    public static final String ARGUMENT_ITEM_COUNT = "AMOUNT";
-    public static final String ARGUMENT_FILE_NAME = "FILE_NAME";
+    public static final Character CURRENCY_SYMBOL = 'Ñ';
 
 }

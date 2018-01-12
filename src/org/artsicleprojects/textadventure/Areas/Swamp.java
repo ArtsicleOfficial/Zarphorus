@@ -16,6 +16,11 @@ public class Swamp implements Area {
     }
 
     @Override
+    public void whenWalkedIn() {
+
+    }
+
+    @Override
     public boolean isDefault() {
         return false;
     }

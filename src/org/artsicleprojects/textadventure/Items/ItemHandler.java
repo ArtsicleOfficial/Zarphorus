@@ -20,7 +20,7 @@ public class ItemHandler
     {
         for ( int i = 0 ; i < items.size() ; i++ )
         {
-            if ( items.get(i).getItemClass().getValue() == itemClass.getValue() )
+            if ( items.get(i).getItemClass().getID() == itemClass.getID() )
             {
                 return items.get(i);
             }

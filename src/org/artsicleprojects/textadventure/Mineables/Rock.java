@@ -3,6 +3,8 @@ package org.artsicleprojects.textadventure.Mineables;
 import org.artsicleprojects.textadventure.AreaCreatables.InventoryItem;
 import org.artsicleprojects.textadventure.Areas.Area;
 import org.artsicleprojects.textadventure.Areas.InitAreas;
+import org.artsicleprojects.textadventure.Enums.AreaClasses;
+import org.artsicleprojects.textadventure.Enums.ItemClasses;
 import org.artsicleprojects.textadventure.Enums.MineableClasses;
 import org.artsicleprojects.textadventure.Enums.ToolClasses;
 import org.artsicleprojects.textadventure.Items.InitItems;
@@ -16,8 +18,8 @@ public class Rock implements Mineable {
     }
 
     @Override
-    public String getHarvestLevels() {
-        return "$1";//$ + number = currTool >= number-
+    public Integer getMinimumHarvestLevel() {
+        return 1;
     }
 
     @Override
@@ -31,8 +33,8 @@ public class Rock implements Mineable {
     }
 
     @Override
-    public Item getDrop() {
-        return InitItems.ROCK;
+    public ItemClasses getDrop() {
+        return ItemClasses.ROCK;
     }
 
     @Override
@@ -57,8 +59,8 @@ public class Rock implements Mineable {
     }
 
     @Override
-    public Area[] getAreaSpawns() {
-        return new Area[]{InitAreas.GRASSLANDS,InitAreas.FOREST,InitAreas.TOWN,InitAreas.DESERT,InitAreas.MOUNTAINS,InitAreas.SWAMP,InitAreas.SNOWY};
+    public AreaClasses[] getAreaSpawns() {
+        return new AreaClasses[]{AreaClasses.GRASSLAND,AreaClasses.FOREST,AreaClasses.TOWN,AreaClasses.DESERT,AreaClasses.MOUNTAIN,AreaClasses.SWAMP,AreaClasses.SNOWY};
     }
 
     @Override

@@ -1,6 +1,7 @@
 package org.artsicleprojects.textadventure.Items;
 
 import org.artsicleprojects.textadventure.Areas.Area;
+import org.artsicleprojects.textadventure.Enums.AreaClasses;
 import org.artsicleprojects.textadventure.Enums.ItemClasses;
 import org.artsicleprojects.textadventure.Enums.ToolClasses;
 import org.artsicleprojects.textadventure.Reference;
@@ -42,7 +43,12 @@ public class Steak implements Item
 		return 20f;
 	}
 
-	@Override
+    @Override
+    public Integer getHarvestLevel() {
+        return null;
+    }
+
+    @Override
 	public boolean canBeSold() {
 		return true;
 	}
@@ -83,9 +89,9 @@ public class Steak implements Item
 	}
 
 	@Override
-	public Area[] getAreaSpawns()
+	public AreaClasses[] getAreaSpawns()
 	{
-		Area[] l = {FOREST};
+		AreaClasses[] l = {AreaClasses.FOREST};
 		return l;
 	}
 

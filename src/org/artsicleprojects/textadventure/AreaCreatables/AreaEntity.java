@@ -12,6 +12,7 @@ public class AreaEntity {
     public EntityClasses ENTITY_CLASS;
     public Integer HEALTH = 0;
     public Integer INTERACTION_ID = 0;
+    public Boolean ATTACKING_PLAYER = false;
     public AreaEntity(EntityClasses ENTITY_CLASS,Integer HEALTH) {
     	this.ENTITY_CLASS = ENTITY_CLASS;
         this.HEALTH = HEALTH;

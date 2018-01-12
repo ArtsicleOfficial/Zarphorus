@@ -1,7 +1,9 @@
 package org.artsicleprojects.textadventure.Enums;
 
 public enum MineableClasses {
-    BOULDER(-15129807);
+    BOULDER(0),
+    COPPER_DEPOSIT(1),
+    IRON_DEPOSIT(2);
     private Integer value;
     public Integer getValue() {
         return value;

@@ -2,6 +2,7 @@ package org.artsicleprojects.textadventure.Items;
 
 import org.artsicleprojects.textadventure.Areas.Area;
 import org.artsicleprojects.textadventure.Areas.InitAreas;
+import org.artsicleprojects.textadventure.Enums.AreaClasses;
 import org.artsicleprojects.textadventure.Enums.ItemClasses;
 import org.artsicleprojects.textadventure.Enums.ToolClasses;
 import org.artsicleprojects.textadventure.Reference;
@@ -68,8 +69,8 @@ public class CatTail implements Item {
     }
 
     @Override
-    public Area[] getAreaSpawns() {
-        return new Area[]{InitAreas.SWAMP,InitAreas.FOREST};
+    public AreaClasses[] getAreaSpawns() {
+        return new AreaClasses[]{AreaClasses.SWAMP,AreaClasses.FOREST};
     }
 
     @Override
@@ -85,6 +86,11 @@ public class CatTail implements Item {
     @Override
     public boolean isTool() {
         return false;
+    }
+
+    @Override
+    public Integer getHarvestLevel() {
+        return null;
     }
 
     @Override

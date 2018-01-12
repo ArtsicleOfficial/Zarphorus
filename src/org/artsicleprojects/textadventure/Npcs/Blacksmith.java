@@ -2,6 +2,7 @@ package org.artsicleprojects.textadventure.Npcs;
 
 import org.artsicleprojects.textadventure.Areas.Area;
 import org.artsicleprojects.textadventure.Areas.InitAreas;
+import org.artsicleprojects.textadventure.Enums.ItemSoldClasses;
 import org.artsicleprojects.textadventure.Enums.NpcClasses;
 
 public class Blacksmith implements Npc {
@@ -21,6 +22,11 @@ public class Blacksmith implements Npc {
     }
 
     @Override
+    public String getName() {
+        return "Blacksmith";
+    }
+
+    @Override
     public Area[] getSpawns() {
         return new Area[]{InitAreas.TOWN};
     }
@@ -28,6 +34,11 @@ public class Blacksmith implements Npc {
     @Override
     public Boolean canSpawn() {
         return true;
+    }
+
+    @Override
+    public ItemSoldClasses[] getAllowedItemsSold() {
+        return new ItemSoldClasses[]{ItemSoldClasses.METAL};
     }
 
     @Override

@@ -2,6 +2,8 @@ package org.artsicleprojects.textadventure.Commands;
 
 import org.artsicleprojects.textadventure.Commands.cmdC.CommandRegistry;
 
+import java.util.concurrent.atomic.AtomicReferenceArray;
+
 public class InitCommands
 {
     public static Help HELP;
@@ -22,6 +24,8 @@ public class InitCommands
     public static Craft CRAFT;
     public static Variable VARIABLE;
     public static Mine MINE;
+    public static Buy BUY;
+    public static Area AREA;
 
 
     public InitCommands() {
@@ -47,6 +51,8 @@ public class InitCommands
         CRAFT = new Craft();
         VARIABLE = new Variable();
         MINE = new Mine();
+        BUY = new Buy();
+        AREA = new Area();
     }
     public static void register() {
         CommandRegistry.registerCommands(
@@ -67,7 +73,9 @@ public class InitCommands
                 CHEATCODE,
                 CRAFT,
                 VARIABLE,
-                MINE
+                MINE,
+                BUY,
+                AREA
         );
     }
 }

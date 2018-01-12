@@ -2,6 +2,7 @@ package org.artsicleprojects.textadventure.Entities;
 
 import org.artsicleprojects.textadventure.Areas.Area;
 import org.artsicleprojects.textadventure.AreaCreatables.InventoryItem;
+import org.artsicleprojects.textadventure.Enums.AreaClasses;
 import org.artsicleprojects.textadventure.Enums.EntityClasses;
 import org.artsicleprojects.textadventure.Enums.ItemClasses;
 import org.artsicleprojects.textadventure.Reference;
@@ -67,8 +68,8 @@ public class Pig implements Entity {
     }
 
     @Override
-    public Area[] getAreaSpawns() {
-        Area[] s = {FOREST,GRASSLANDS,TOWN,MOUNTAINS,SNOWY,SWAMP};
+    public AreaClasses[] getAreaSpawns() {
+        AreaClasses[] s = {AreaClasses.FOREST,AreaClasses.GRASSLAND,AreaClasses.TOWN,AreaClasses.MOUNTAIN,AreaClasses.SNOWY,AreaClasses.SWAMP};
         return s;
     }
 
@@ -84,6 +85,21 @@ public class Pig implements Entity {
     @Override
     public Integer getSpawnCount() {
         return 6;
+    }
+
+    @Override
+    public Boolean alwaysSpawnsAtNight() {
+        return false;
+    }
+
+    @Override
+    public Boolean autoAttacksPlayer() {
+        return false;
+    }
+
+    @Override
+    public Float getMoneyOnDeath() {
+        return 0f;
     }
 
     @Override

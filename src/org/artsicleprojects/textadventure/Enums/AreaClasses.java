@@ -8,7 +8,8 @@ public enum AreaClasses {
     SNOWY(4,24),
     MOUNTAIN(5,25),
     DESERT(6,27),
-    SWAMP(7,27);
+    SWAMP(7,27),
+    CAVE(8,65);
     private Integer[] value = new Integer[2];
     public Integer[] getValue() {
         return value;

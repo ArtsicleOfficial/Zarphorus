@@ -7,11 +7,13 @@ import org.artsicleprojects.textadventure.Commands.InitCommands;
 import org.artsicleprojects.textadventure.Commands.cmdC.CommandHandler;
 import org.artsicleprojects.textadventure.Crafts.Crafting;
 import org.artsicleprojects.textadventure.Entities.InitEntities;
+import org.artsicleprojects.textadventure.Enums.Arguments;
 import org.artsicleprojects.textadventure.Events.Input;
 import org.artsicleprojects.textadventure.Items.InitItems;
 import org.artsicleprojects.textadventure.Items.Item;
 import org.artsicleprojects.textadventure.Items.ItemHandler;
 import org.artsicleprojects.textadventure.Mineables.InitMineables;
+import org.artsicleprojects.textadventure.Npcs.InitNpcs;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
@@ -35,7 +37,7 @@ public class Main {
 
     public static JButton enterLastMessage = new JButton("Enter previous message");
 
-    public static Boolean autosave = false;
+    public static Boolean autosave = false, deleteLogFile = true;
 
     public static String autosaveFileName = "New Game", lastCommand = "help";
 
@@ -75,6 +77,12 @@ public class Main {
             FileSystem.OverwriteSaveGame(autosaveFileName);
         }
     }
+    private static void close() {
+        if(deleteLogFile) {
+            new File("C:/" + Reference.NAME + "/logs/log" + date.format(launchDate) + ".txt").delete();
+        }
+        System.exit(0);
+    }
     public static void main(String[] args) {
         preInit();
         init();
@@ -89,11 +97,11 @@ public class Main {
             @Override
             public void windowClosing(WindowEvent e) {
                 autosave();
+                close();
             }
 
             @Override
             public void windowClosed(WindowEvent e) {
-                System.exit(0);
             }
 
             @Override
@@ -125,11 +133,11 @@ public class Main {
             @Override
             public void windowClosing(WindowEvent e) {
                 autosave();
+                close();
             }
 
             @Override
-            public void windowClosed(WindowEvent e) {
-                System.exit(0);
+            public void windowClosed(WindowEvent e){
             }
 
             @Override
@@ -161,11 +169,12 @@ public class Main {
             @Override
             public void windowClosing(WindowEvent e) {
                 autosave();
+                close();
             }
 
             @Override
             public void windowClosed(WindowEvent e) {
-                System.exit(0);
+
             }
 
             @Override
@@ -202,6 +211,7 @@ public class Main {
         new InitEntities();
         new InitAreas();
         new InitMineables();
+        new InitNpcs();
         new Player();
     }
 
@@ -261,19 +271,29 @@ public class Main {
     }
 
     public static void addText(String tex) {
+
         StringBuilder te = new StringBuilder(tex);
-        if(!ArtUtils.StringEndsInPunctuation(te.toString())) {
-            if(Character.isLetterOrDigit(te.toString().charAt(te.toString().length()-1))) {
-                te.append(".");
+        if(tex.length() >= 1) {
+            if(!ArtUtils.StringEndsInPunctuation(te.toString())) {
+                if(Character.isLetterOrDigit(te.toString().charAt(te.toString().length()-1))) {
+                    te.append(".");
+                }
             }
+        } else {
+            te.append(" ");
         }
         String text = te.toString();
+        text = text.replace("##itemname", Arguments.ITEM_NAME.getValue());
+        text = text.replace("##amount",Arguments.ITEM_COUNT.getValue());
+        text = text.replace("##filename",Arguments.FILE_NAME.getValue());
+        text = text.replace("##variablename",Arguments.VARIABLE_NAME.getValue());
+        text = text.replace("##interaction_id",Arguments.INTERACTION_ID.getValue());
         DateFormat f = new SimpleDateFormat("[dd/mm/yy hh:mm:ss] > ");
         Date c = new Date();
         console.setText(console.getText()+f.format(c)+text+"\n");
         try {
-            File d = new File("C:/Zarphorus/logs");
-            File v = new File("C:/Zarphorus/logs/log" + date.format(launchDate) + ".txt");
+            File d = new File("C:/" + Reference.NAME + "/logs");
+            File v = new File("C:/" + Reference.NAME + "/logs/log" + date.format(launchDate) + ".txt");
             if(!d.exists()) {
                 d.mkdirs();
             }
